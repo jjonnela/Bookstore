@@ -1,26 +1,22 @@
 package fi.onnela.Bookstore.web;
 
-import java.util.ArrayList;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import fi.onnela.Bookstore.domain.BookRepository;
 
 @Controller
 public class BookController {
 
-	ArrayList<String> books = new ArrayList<String>();
+	@Autowired
+	private BookRepository repository;
 
-	@GetMapping("index")
-	public String handleBooks(@RequestParam(required = false) String bookTitle, Model model) {
+	@GetMapping("booklist")
+	public String bookList(Model model) {
+		model.addAttribute("books", repository.findAll());
 
-		if (bookTitle != null) {
-			books.add(bookTitle);
-		}
-
-		model.addAttribute("books", books);
-
-		return "index";
+		return "booklist";
 	}
 }

@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 
 import fi.onnela.Bookstore.domain.Book;
 import fi.onnela.Bookstore.domain.BookRepository;
+import fi.onnela.Bookstore.domain.Category;
+import fi.onnela.Bookstore.domain.CategoryRepository;
 
 @SpringBootApplication
 public class BookstoreApplication {
@@ -16,15 +18,18 @@ public class BookstoreApplication {
 	}
 	
 	@Bean
-	public CommandLineRunner demo(BookRepository repository) {
+	public CommandLineRunner demo(BookRepository repository, CategoryRepository catrepository) {
 		return (args) -> {
-			Book kirja1 = new Book("Testikirja1", "Testiauthor1", "ISBN-111", 2022, 29.40);
-			Book kirja2 = new Book("Testikirja2", "Testiauthor2", "ISBN-222", 2023, 49.40);
-			Book kirja3 = new Book("Testikirja3", "Testiauthor3", "ISBN-333", 2024, 69.40);
 			
-			repository.save(kirja1);
-			repository.save(kirja2);
-			repository.save(kirja3);
+			catrepository.save(new Category("Fantasy"));
+			catrepository.save(new Category("Horror"));
+			catrepository.save(new Category("Comic"));
+			
+			
+			repository.save(new Book ("Testikirja1", "Testiauthor1", "ISBN-111", 2021, 19.40, catrepository.findByName("Fantasy").get(0)));
+			repository.save(new Book ("Testikirja2", "Testiauthor2", "ISBN-222", 2022, 29.40, catrepository.findByName("Horror").get(0)));
+			repository.save(new Book ("Testikirja3", "Testiauthor3", "ISBN-333", 2023, 39.40, catrepository.findByName("Comic").get(0)));
+			
 		};
 	}
 

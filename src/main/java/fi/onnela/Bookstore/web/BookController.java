@@ -10,12 +10,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import fi.onnela.Bookstore.domain.Book;
 import fi.onnela.Bookstore.domain.BookRepository;
+import fi.onnela.Bookstore.domain.CategoryRepository;
 
 @Controller
 public class BookController {
 
 	@Autowired
 	private BookRepository repository;
+	
+	@Autowired
+	private CategoryRepository catrepository;
 
 	@GetMapping("/booklist")
 	public String bookList(Model model) {
@@ -33,6 +37,7 @@ public class BookController {
 	@RequestMapping(value="/add")
 	public String addBook(Model model) {
 		model.addAttribute("book", new Book());
+		model.addAttribute("categories", catrepository.findAll());
 		return "addbook";
 	}
 	
